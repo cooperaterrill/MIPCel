@@ -1,5 +1,5 @@
 def bin2dec(num: str) -> int:
-    return bin(int(num))[2:]
+    return int(num,2)
 
 def dec2bin(num: int, bits: int) -> str:
     return "{0:b}".format(num).zfill(bits)
@@ -53,7 +53,7 @@ class RType(Instruction):
         fields = [opcode, self.rs, self.rt, self.rd, self.shamt, funct]
 
         res = create_bin_repr(fields,self.sizes)
-        print(res)
+        #print(res)
         return res
 
     def __init__(self, rs, rt, rd, operation, shamt=0) -> None:
@@ -96,7 +96,7 @@ class IType(Instruction):
         fields = [opcode,self.rs,self.rt,self.immd]
         res = create_bin_repr(fields,self.sizes)
 
-        print(res)
+        #print(res)
         return res
     
     def __init__(self, rs, rt, operation, immd) -> None:
@@ -116,25 +116,27 @@ class JType(Instruction):
             case 'J':
                 opcode = 2
             case _:
-                raise "Couldn't' match operation!"
+                raise "Couldn't match operation!"
                 
         fields = [opcode, self.immd]
         res = create_bin_repr(fields, self.sizes) 
         
-        print(res)
+        #print(res)
         return res
+    
     def __init__(self, operation, immd) -> None:
         self.operation = operation
         self.immd = immd
+        
 def main() -> None: 
-    add = RType(0,8,2,'ADD')
-    xori = IType(4,9,"XORI",384)
-    j = JType('J', 420)
-    print(int(add.bin_repr(),2)) 
-    print(int(xori.bin_repr(), 2))
-    print(int(j.bin_repr(), 2))
-    
-    print(bin2dec("7"))
+    add = RType(rs=0,rt=8,rd=2,operation="ADD")
+    xori = IType(rs=4,rt=9,operation="XORI",immd=384)
+    xori2 = IType(rs=3,rt=13,operation="XORI",immd=1999)
+    j = JType(operation='J', immd=420)
+    print(bin2dec(add.bin_repr())) 
+    print(bin2dec(xori.bin_repr()))
+    print(bin2dec(j.bin_repr()))
+    print(bin2dec(xori2.bin_repr()))
 
 if __name__ == "__main__":
     main()
